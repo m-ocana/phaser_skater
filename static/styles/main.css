@@ -6,7 +6,7 @@ html {
 }
 
 body {
-  height: inherit;
+  height: 1048px;
   width: inherit;
   margin: 0px;
   display: flex;

@@ -9,7 +9,7 @@ class Main extends Phaser.State {
         this.game.plugins.add(Phaser.Plugin.ArcadeSlopes);
 
         //Set the games background colour
-        //this.game.stage.backgroundColor = '#033';
+        this.game.stage.backgroundColor = '#f76943';
 
         //Adding the Tilemap
 		this.map = this.game.add.tilemap('tilemap');
@@ -19,37 +19,34 @@ class Main extends Phaser.State {
         /*this.dayCycle = new DayCycle(this.game, 50000);
  
         let bgBitMap = this.game.add.bitmapData(this.game.width, this.game.height);
- 
+ 		
         bgBitMap.ctx.rect(0, 0, this.game.width, this.game.height);
         bgBitMap.ctx.fillStyle = '#b2ddc8';
         bgBitMap.ctx.fill();
  
         this.backgroundSprite = this.game.add.sprite(0, 0, bgBitMap);
- 
+ 		
         this.sunSprite = this.game.add.sprite(50, -250, 'sun');
         this.moonSprite = this.game.add.sprite(this.game.width - (this.game.width / 4), this.game.height + 500, 'moon');
  		*/
  		//Parallax Images
-		this.mountainsBack = this.game.add.tileSprite(0, 
-			this.game.height-512, 
+		/*this.buildingsBack = this.game.add.tileSprite(0, 0, 
 			this.map.widthInPixels, 
-			this.game.cache.getImage('mountains-back').height, 
-			'mountains-back'
+			this.game.cache.getImage('buildings-back').height, 
+			'buildings-back'
+		);*/
+
+		this.buildingsMiddle = this.game.add.tileSprite(0, 0,
+			this.map.widthInPixels, 
+			this.game.cache.getImage('buildings-middle').height, 
+			'buildings-middle'
 		);
 
-		this.mountainsMid1 = this.game.add.tileSprite(0, 
-			this.game.height-320, 
+		this.buildingsFront = this.game.add.tileSprite(0, 0,
 			this.map.widthInPixels, 
-			this.game.cache.getImage('mountains-mid1').height, 
-			'mountains-mid1'
+			this.game.cache.getImage('buildings-front').height, 
+			'buildings-front'
 		);
-
-		this.mountainsMid2 = this.game.add.tileSprite(0, 
-			this.game.height, 
-			this.map.widthInPixels, 
-			this.game.cache.getImage('mountains-mid2').height, 
-			'mountains-mid2'
-		);	
  
         /*let backgroundSprites = [
             {sprite: this.backgroundSprite, from: 0x1f2a27, to: 0xB2DDC8},
@@ -99,7 +96,7 @@ class Main extends Phaser.State {
 		//Add Player
 		this.player = this.game.add.sprite(64, 832, 'player');
 		this.game.physics.arcade.enable(this.player);
-		this.player.body.gravity.y = 2000;
+		this.player.body.gravity.y = 500;
 		 
 		this.game.slopes.enable(this.player);
 		this.game.camera.follow(this.player);
@@ -119,25 +116,30 @@ class Main extends Phaser.State {
 		//Parallax parameters
 	    //this.mountainsBack.tilePosition.x -= 0.05;
 	    //this.mountainsMid1.tilePosition.x -= 0.3;
-	    //ddddthis.mountainsMid2.tilePosition.x -= 0.75;
+	    //this.mountainsMid2.tilePosition.x -= 0.75;
 
-		if (this.controls.left.isDown) {
-			this.player.body.velocity.x -= 20;
-		}
-		
-		if (this.controls.right.isDown) {
-			this.player.body.velocity.x += 20;
-				    this.mountainsBack.tilePosition.x -= 0.05;
-	    this.mountainsMid1.tilePosition.x -= 0.3;
-	    this.mountainsMid2.tilePosition.x -= 0.5;
+		if (this.controls.left.isDown){
+			if(this.player.body.touching.down){
+				this.player.body.velocity.x -= 10;
+			} else {
+				this.player.body.velocity.x -= 2;
+			}
 		}
 
-		if (this.controls.up.isDown) {
-			this.player.body.velocity.y -= 50;
+		if (this.controls.right.isDown){
+			if(this.player.body.touching.down){
+				this.player.body.velocity.x += 10;
+			} else {
+				this.player.body.velocity.x += 2;
+			}
+		}
+
+		if (this.controls.up.isDown && this.player.body.touching.down) {
+			this.player.body.velocity.y -= 400;
 		}
 
 		if (this.player.body.bottom >= this.world.bounds.bottom) {
-		    this.state.restart();
+		    this.state.start("Main");
 		}
 
 	}
