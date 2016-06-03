@@ -94,7 +94,7 @@ class Main extends Phaser.State {
 		this.map.setCollisionBetween(2, 34, true, 'collision');
 
 		//Add Player
-		this.player = this.game.add.sprite(64, 832, 'player');
+		this.player = this.game.add.sprite(64, 768, 'player');
 		this.game.physics.arcade.enable(this.player);
 		this.player.body.gravity.y = 500;
 		 
