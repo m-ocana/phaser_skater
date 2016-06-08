@@ -13,7 +13,7 @@ class Preload extends Phaser.State {
     	this.game.load.spritesheet('tiles', 'assets/ninja-tiles64.png', 64, 64);
 
     	//this.game.load.image('player', 'assets/player.png');
-        this.game.load.image('player', 'assets/skater-white.png');
+        this.game.load.spritesheet('player', 'assets/skater-sprites.png',64,128);
 	}
 
 	create() {

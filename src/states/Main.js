@@ -46,16 +46,18 @@ class Main extends Phaser.State {
     
     	this.player.body.setCircle(64,0,0);
     	this.player.body.fixedRotation=true;
+    	this.player.animations.add('move', [0,1], 0.5, true);
+    	this.player.animations.add('jump',[2,3,4],8);
+    	this.player.animations.add('land',[5,6],4);
+
+    	this.game.camera.follow(this.player);
+
 		//this.player.body.gravity.y = 200;
 		 
 		//this.game.slopes.enable(this.player);
-		this.game.camera.follow(this.player);
+		
 
-		this.controls = this.input.keyboard.addKeys({
-			'up': Phaser.KeyCode.W,
-			'left': Phaser.KeyCode.A,
-			'right': Phaser.KeyCode.D
-		});		
+		this.controls = this.game.input.keyboard.createCursorKeys();		
 
    	}
 
@@ -64,6 +66,7 @@ class Main extends Phaser.State {
 		if (this.controls.left.isDown){
 			if(this._touchingDown(this.player)){
 				// flips image to the left
+				this.player.animations.play('move');
 				this.player.scale.x = -1;
 				this.player.body.velocity.x -= 20;
 			} else {
@@ -74,6 +77,7 @@ class Main extends Phaser.State {
 
 		if (this.controls.right.isDown){
 			if(this._touchingDown(this.player)){
+				this.player.animations.play('move');
 				this.player.scale.x = 1;
 				this.player.body.velocity.x += 20;
 			} else {
@@ -83,12 +87,15 @@ class Main extends Phaser.State {
 		}
 
 		if (this.controls.up.isDown && this._touchingDown(this.player)) {
+			this.player.animations.play('jump');
 			this.player.body.velocity.y -= 400;
 		}
 
 		if (this.player.bottom >= this.world.bounds.bottom) {
 		    this.state.start("Main");
 		}
+
+
 
     this._angle(this.player);
     //if (!this._touchingDown(this.player) ){this.player.angle=0;}
