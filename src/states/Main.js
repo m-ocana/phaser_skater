@@ -1,18 +1,15 @@
-import DayCycle from 'objects/DayCycle';
-
 class Main extends Phaser.State {
 
 	create() {
 
-		//Enable Arcade Physics
+		// Enable Arcade Physics
         this.game.physics.startSystem(Phaser.Physics.P2JS);
-        //this.game.physics.setBoundsToWorld();
+        
+        // Set variables
         this.game.physics.p2.gravity.y = 1600;
-
-        //Set the games background colour
         this.game.stage.backgroundColor = '#f76943';
 
-        //Adding the Tilemap
+        // Adding Tilemap
 		this.map = this.game.add.tilemap('tilemap');
 		this.map.addTilesetImage('ninja-tiles64', 'tiles');
 
@@ -28,35 +25,30 @@ class Main extends Phaser.State {
 			'buildings-front'
 		);
 
-        //Adding Ground & collisions
+        // Creating layers & adding collisions
 		this.ground = this.map.createLayer('groundLayer');
 		this.ramps = this.map.createLayer('tiledRampsLayer');
-		this.ground.resizeWorld();
-		 
 		this.map.setCollisionBetween(2,34,true,'groundLayer');
-		
 		this.game.physics.p2.convertTilemap(this.map, this.ground);
 		this.game.physics.p2.convertCollisionObjects(this.map,"ramps");
 		
-		//Add Player
+		// Match canvas to the size of the Tilemap
+		this.ground.resizeWorld(); 
+		
+		// Add Player
 		this.player = this.game.add.sprite(64, 1024, 'player');
-
 		this.game.physics.p2.enable(this.player);
-		this.player.anchor.setTo(0.5,0.5); // set the anchor to the exact middle of the player (good for flipping the image on the same place)
-    
-    	this.player.body.setCircle(64,0,0);
-    	this.player.body.fixedRotation=true;
+		// Setting Player parameters
+		this.player.anchor.setTo(0.5,0.5); // set the anchor to the exact middle of the player
+    	this.player.body.setCircle(64,0,0); // set circle around the player with 64px radius
+    	this.player.body.fixedRotation = true;
+    	// Adding player animations
     	this.player.animations.add('move', [0,1], 0.5, true);
     	this.player.animations.add('jump',[2,3,4],8);
     	this.player.animations.add('land',[5,6],4);
 
+    	// Setting camera & adding controls
     	this.game.camera.follow(this.player);
-
-		//this.player.body.gravity.y = 200;
-		 
-		//this.game.slopes.enable(this.player);
-		
-
 		this.controls = this.game.input.keyboard.createCursorKeys();		
 
    	}
@@ -95,10 +87,7 @@ class Main extends Phaser.State {
 		    this.state.start("Main");
 		}
 
-
-
-    this._angle(this.player);
-    //if (!this._touchingDown(this.player) ){this.player.angle=0;}
+    	this._angle(this.player);
 
 	}
 
@@ -125,9 +114,7 @@ class Main extends Phaser.State {
         var c = this.game.physics.p2.world.narrowphase.contactEquations[i];  // cycles through all the contactEquations until it finds our "someone"
         if (c.bodyA === someone.body.data || c.bodyB === someone.body.data)        {
             var d = p2.vec2.dot(c.normalA, yAxis); // Normal dot Y-axis
-           // if (c.bodyA === someone.body.data) d *= -1;
             someone.angle = c.normalA[0]*100;
-            //console.log(c.normalA[0])
         }
     } return result;
 }
