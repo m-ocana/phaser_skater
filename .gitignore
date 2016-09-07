@@ -1,5 +1,2 @@
 node_modules
-build
-*.log
-*.tmp
-*.DS_Store
+.git
